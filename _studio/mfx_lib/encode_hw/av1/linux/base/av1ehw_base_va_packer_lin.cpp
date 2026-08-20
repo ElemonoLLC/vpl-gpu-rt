@@ -47,9 +47,10 @@ void InitSPS(
 
     mfxU32 bNeedRateParam =
         par.mfx.RateControlMethod == MFX_RATECONTROL_CBR
-        || par.mfx.RateControlMethod == MFX_RATECONTROL_VBR;
+        || par.mfx.RateControlMethod == MFX_RATECONTROL_VBR
+        || par.mfx.RateControlMethod == MFX_RATECONTROL_ICQ;
 
-    sps.bits_per_second = bNeedRateParam * TargetKbps(par.mfx) * 1000;
+    sps.bits_per_second = bNeedRateParam * (par.mfx.RateControlMethod == MFX_RATECONTROL_ICQ ? MaxKbps(par.mfx) : TargetKbps(par.mfx)) * 1000;
 
     sps.order_hint_bits_minus_1 = static_cast<mfxU8>(bs_sh.order_hint_bits_minus1);
 
@@ -502,9 +503,10 @@ inline void AddVaMiscRC(
 
     mfxU32 bNeedRateParam =
         par.mfx.RateControlMethod == MFX_RATECONTROL_CBR
-        || par.mfx.RateControlMethod == MFX_RATECONTROL_VBR;
+        || par.mfx.RateControlMethod == MFX_RATECONTROL_VBR
+        || par.mfx.RateControlMethod == MFX_RATECONTROL_ICQ;
 
-    rc.bits_per_second = bNeedRateParam * MaxKbps(par.mfx) * 1000;
+    rc.bits_per_second = bNeedRateParam * (par.mfx.RateControlMethod == MFX_RATECONTROL_ICQ ? MaxKbps(par.mfx) : TargetKbps(par.mfx)) * 1000;
 
     if(rc.bits_per_second)
         rc.target_percentage = mfxU32(100.0 * (mfxF64)TargetKbps(par.mfx) / (mfxF64)MaxKbps(par.mfx));

@@ -303,6 +303,7 @@ void General::SetInherited(ParamInheritance& par)
                 , [](const mfxVideoParam& parInit, mfxVideoParam& parReset)
                 {
                     INHERIT_OPT(mfx.ICQQuality);
+                    INHERIT_BRC(MaxKbps);
                 }
             }
             , {
